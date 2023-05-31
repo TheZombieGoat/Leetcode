@@ -1,23 +1,16 @@
 #Given two integer arrays nums1 and nums2, return an array of their intersection. Each element in the result must appear as many times as it shows in both arrays and you may return the result in any order.
 
+#solution using dicts. O(n) time and space.
 class Solution(object):
     def intersect(self, nums1, nums2):
-        i = 0
-        j = 0
+        d1 = {}
+        d2 = {}
         arr = []
-        if len(nums1) <= len(nums2):
-            small = sorted(nums1)
-            big = sorted(nums2)
-        else:
-            small = sorted(nums2)
-            big = sorted(nums1)
-        while j < len(small) and i < len(big):
-            if small[j] < big[i]:
-                j += 1
-            elif small[j] == big[i]:
-                arr.append(small[j])
-                j += 1
-                i += 1
-            else:
-                 i += 1
+        for num in nums1:
+            d1[num] = d1.get(num,0) + 1
+        for num in nums2:
+            d2[num] = d2.get(num,0) + 1
+        for key in d1:
+            if key in d2:
+                arr += [key]*min(d2[key],d1[key])
         return arr
