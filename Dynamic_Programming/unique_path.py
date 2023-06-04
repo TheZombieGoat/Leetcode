@@ -9,9 +9,16 @@ The test cases are generated so that the answer will be less than or equal to 2 
 class Solution:    
     def uniquePaths(self,m: int, n: int) -> int:
         return up(m,n)
-@cache
+d = {}
 def up(a,b):
     if a == 1 or b == 1:
         return 1 
     else:
-        return up(a-1,b) + up(a,b-1) 
+        if (a,b) in d:
+            return d[(a,b)]
+        else:
+            val = up(a-1,b) + up(a,b-1) 
+            d[(a,b)] = val
+            return val
+
+
