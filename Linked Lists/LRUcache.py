@@ -22,51 +22,39 @@ class LRUCache:
     def append(self,node,k):
         if self.p is None:
             if node.prev is None:
-                self.s = self.s.next
-                self.s.prev = None
-                print("a")
-                node.next = None  
-                node.prev = self.b
+                self.s, self.s.prev = self.s.next, None
+                node.next, node.prev = None, self.b
                 self.b.next = node
-                self.p = node
-                self.b = node
+                self.p, self.b = node, node
                 self.p = self.p.next
                 self.d[k] = node
             else:
-                print("b") 
                 node.next.prev = node.prev
                 node.prev.next = node.next
                 node.prev, node.next = None, None
-                self.b.next = node
-                node.prev = self.b
-                self.p = node
-                self.b = node
+                self.b.next, node.prev = node, self.b
+                self.p, self.b = node, node
                 self.p = self.p.next
                 self.d[k] = node
         elif self.p.key is None:
             if node.prev is None:
-                print("c")
-                self.s = self.s.next
-                self.s.prev = None
-                app = self.p.next
-                self.s = self.s.next
+                self.s, self.s.prev = self.s.next, None
                 node.next.prev = None
                 self.b.next = node
+                node.prev = self.b
                 temp = ListNode(1)
-                node.next = temp
-                temp.next = app 
-                self.p = self.p.next
+                temp.next = self.p.next
+                node.next, temp.prev = temp, node
+                self.p, self.b = temp, node
                 self.d[k] = node
             else:
-                print("d")
-                app = self.p.next
-                node.next.prev = node.prev
-                node.prev.next = node.next
+                node.next.prev, node.prev.next = node.prev, node.next
                 self.b.next = node
+                node.prev = self.b
                 temp = ListNode(1)
-                node.next = temp
-                temp.next = app 
-                self.p = self.p.next
+                temp.next = self.p.next
+                node.next, temp.prev = temp, node 
+                self.p, self.b = temp, node
                 self.d[k] = node
                 
     def get(self, key: int) -> int:
@@ -75,28 +63,21 @@ class LRUCache:
             node = self.d[key]
             nk = node.key
             if node.next is None or node.next.key is None:
-                print("get1")
                 return ret
-            print("get2", end="")
             LRUCache.append(self,node,nk)
             if node.next is None or node.next.key is None:
-                print(" it worked")
-            return ret
+                return ret
         return -1
 
     def put(self, key: int, value: int) -> None:
         if key in self.d:
-            print("key exists",key,value)
             node = self.d[key]
             nk = node.key
             self.d[key].val = value
             if node.next is None or node.next.key is None:
                 return 
             LRUCache.append(self,node,nk)
-            #self.d[nk] = node
-            #self.d[key] = node.next
         elif self.p is not None and self.p.key is None:
-                print("p isnt none but key is none",key,value)
                 self.p.key = key
                 self.p.val = value
                 self.d[key] = self.p
@@ -105,7 +86,6 @@ class LRUCache:
                 if self.p is not None:
                     self.p.prev = self.b   
         elif self.p is None:
-            print("hi",key,value)
             self.p = ListNode(value)
             self.p.prev = self.b
             self.b.next = self.p
@@ -118,10 +98,6 @@ class LRUCache:
             self.s = self.s.next
             if k in self.d:
                 del self.d[k]
-
-        
-
-
 
 # Your LRUCache object will be instantiated and called as such:
 # obj = LRUCache(capacity)
