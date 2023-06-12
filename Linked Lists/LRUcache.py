@@ -1,3 +1,16 @@
+"""
+Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
+
+Implement the LRUCache class:
+
+    LRUCache(int capacity) Initialize the LRU cache with positive size capacity.
+    int get(int key) Return the value of the key if the key exists, otherwise return -1.
+    void put(int key, int value) Update the value of the key if the key exists. Otherwise, add the key-value pair to the cache. If the number of keys exceeds the capacity from this operation, evict the least recently used key.
+
+The functions get and put must each run in O(1) average time complexity.
+"""
+
+
 class ListNode:
     def __init__(self, val,key=None,next=None,prev=None):
         self.key = key
@@ -27,7 +40,6 @@ class LRUCache:
                 self.b.next = node
                 self.p, self.b = node, node
                 self.p = self.p.next
-                self.d[k] = node
             else:
                 node.next.prev = node.prev
                 node.prev.next = node.next
@@ -35,7 +47,6 @@ class LRUCache:
                 self.b.next, node.prev = node, self.b
                 self.p, self.b = node, node
                 self.p = self.p.next
-                self.d[k] = node
         elif self.p.key is None:
             if node.prev is None:
                 self.s, self.s.prev = self.s.next, None
@@ -46,7 +57,6 @@ class LRUCache:
                 temp.next = self.p.next
                 node.next, temp.prev = temp, node
                 self.p, self.b = temp, node
-                self.d[k] = node
             else:
                 node.next.prev, node.prev.next = node.prev, node.next
                 self.b.next = node
@@ -55,7 +65,8 @@ class LRUCache:
                 temp.next = self.p.next
                 node.next, temp.prev = temp, node 
                 self.p, self.b = temp, node
-                self.d[k] = node
+        self.d[k] = node
+                
                 
     def get(self, key: int) -> int:
         if key in self.d:
