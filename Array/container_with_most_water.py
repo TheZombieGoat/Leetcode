@@ -7,21 +7,17 @@ Return the maximum amount of water a container can store.
 Notice that you may not slant the container.
 """
 
+# O(n) optimal solution
 class Solution:
     def maxArea(self, height: List[int]) -> int:
-        j = 1
-        mr = 0
-        ml = 0
-        index_1 = 0
-        index_2 = 0
-        m = 0
-        for j in range(j,len(height)):
-            if height[j] + j >= mr:
-                mr = height[j]
-                index_2 = j
-        print(mr,index_2)
-        for i in range(len(height)-1):
-            if min(mr,height[i])*(index_2 - i) > m:
-                m = min(mr,height[i])*(index_2 - i)
-                print(m)
-        return m
+        l = 0
+        r = len(height)-1
+        max_area = 0
+        while l < r:
+            area = (r-l)*min(height[l],height[r])
+            max_area = max(max_area,area)
+            if height[l] > height[r]:
+                r -= 1
+            else:
+                l += 1
+        return max_area
