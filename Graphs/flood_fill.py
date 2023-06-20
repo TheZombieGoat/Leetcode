@@ -8,34 +8,21 @@ Replace the color of all of the aforementioned pixels with color. Return the mod
 
 
 class Solution:
-    def floodFill(self, image: List[List[int]], sr: int, sc: int, color: int) -> List[List[int]]:
-        height = len(image)
-        width = len(image[0])
-        orig = image[sr][sc]
-        image[sr][sc] = color
-        helper(image,sc,sr,height,width,color,orig)
+    def floodFill(self, image: List[List[int]], sr: int, sc: int, color: int) -> List[List[int]]:        
+        start_color = image[sr][sc]       
+        def flood_fill(x, y):
+            if x < 0 or x >= len(image): return
+            if y < 0 or y >= len(image[0]): return
+            
+            if image[x][y] == color: return
+            if image[x][y] != start_color: return
+            
+            image[x][y] = color
+            
+            flood_fill(x-1, y)
+            flood_fill(x+1, y)
+            flood_fill(x, y+1)
+            flood_fill(x, y-1)
+        
+        flood_fill(sr, sc)
         return image
-
-def helper(image,x,y,height,width,color,orig):
-    #up
-    if y-1 >= 0 and image[y-1][x] == orig:
-        if orig != color:
-            image[y-1][x] = color
-            helper(image,x,y-1,height,width,color,orig)
-    #down
-    if y+1 < height and image[y+1][x] == orig:
-        if orig != color:
-            image[y+1][x] = color
-            helper(image,x,y+1,height,width,color,orig)
-    #left
-    if x-1 >= 0 and image[y][x-1] == orig:
-        if orig != color:
-            image[y][x-1] = color
-            helper(image,x-1,y,height,width,color,orig)
-    #right
-    if x+1 < width and image[y][x+1] == orig:
-        if orig != color:
-            image[y][x+1] = color
-            helper(image,x+1,y,height,width,color,orig) 
-    if image[y][x] == color:
-        return
